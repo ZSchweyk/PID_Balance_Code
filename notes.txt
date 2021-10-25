@@ -1,0 +1,3 @@
+Work on adjusting P, I, and D constants such that the seesaw stays still when the ball is in the middle.
+
+Might have to split up code so that if the ball is not close to the middle, it uses one set of code with specific constants, otherwise, it uses another set of code with other constant values. Try and if else block.
