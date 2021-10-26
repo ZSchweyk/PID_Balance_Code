@@ -32,12 +32,12 @@ int period = 120;  //Refresh rate period of the loop is 50ms
 float kp=8; //Mine was 8
 float ki=0.2; //Mine was 0.2
 float kd=5000; //Mine was 3100
-float distance_setpoint = 35;         //Should be the distance from sensor to the middle of the bar in mm
+float distance_setpoint = 36;         //Should be the distance from sensor to the middle of the bar in mm
 float PID_p, PID_i, PID_d, PID_total;
 ///////////////////////////////////////////////////////
 
-boolean debug = false;
-
+boolean debug = true;
+int num_consecutive_times_close_to_center = 0;
 
 void setup() {
   //analogReference(EXTERNAL);
@@ -73,29 +73,18 @@ void loop() {
   while (true) {
     if (millis() > time+period)
     {
-      //                       {time, p, i, d, distance}
       time = millis();
       VL53L0X_RangingMeasurementData_t measure;
   
-      //Serial.print(time); Serial.print(", ");
-      //Serial.print("Reading a measurement... ");
       lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
     
       if (measure.RangeStatus != 4) 
       { // phase failures have incorrect data
-//        distance = 0;
-//        int n = 100;
-//        for(int i = 0; i < n; i++)
-//        {
-//          distance += measure.RangeMilliMeter / 10;
-//        }
-//        distance /= n;
         distance = measure.RangeMilliMeter / 10;
-        if (distance > 55) {
+        if (distance > 55)
+        {
           distance = 55;
         }
-        
-        //Serial.print("Distance (cm): "); Serial.println(distance);
       } 
       else 
       {
@@ -104,17 +93,13 @@ void loop() {
       
       if (debug) {Serial.print("Distance = "); Serial.println(distance);}
       
-      distance_error = distance_setpoint - distance;   
+      distance_error = distance_setpoint - distance - 4;
+
+      
+      
       if (debug) {Serial.print("\t\t\tDistance Error = "); Serial.println(distance_error);}
       PID_p = kp * distance_error;
-      //Serial.print("P = "); Serial.println(PID_p);
-      //Serial.print(PID_p); Serial.print(", ");
       float dist_diference = distance_error - distance_previous_error;     
-      
-      //Serial.print("Distance Error: "); Serial.println(distance_error);
-      //Serial.print("Distance Previous Error: "); Serial.println(distance_previous_error);
-      //Serial.print("Difference: "); Serial.println(distance_error - distance_previous_error);
-      //delay(1500);
         
       if(-3 < distance_error && distance_error < 3)
       {
@@ -124,62 +109,46 @@ void loop() {
       {
         PID_i = 0;
       }
-      //Serial.print(PID_i); Serial.print(", ");
 
       PID_d = kd*((distance_error - distance_previous_error)/period);
 
-      //Serial.print(PID_d); Serial.print(", ");
+      if (debug) {Serial.print("PID_d = "); Serial.println(PID_d);}
 
-      //Serial.println(distance);
+      if(abs(distance_error) < 6 && abs(PID_d) < 175)
+      {
+        num_consecutive_times_close_to_center += 1;
+        if(num_consecutive_times_close_to_center >= 3)
+        {
+          Serial.println("Stop!");
+          myservo.write(125);
+          return;
+        }
+      }
+      else
+      {
+        num_consecutive_times_close_to_center = 0;
+      }
+
+      
     
       PID_total = PID_p + PID_i + PID_d;  
-      //Serial.print("\t\t\t\tPID_Total = "); Serial.println(PID_total);
-      //PID_total = PID_d;  
-      //Serial.print("PID_p: "); Serial.println(PID_p);
-      //Serial.print("PID_i: "); Serial.println(PID_i);
-      //Serial.print("PID_d: "); Serial.println(PID_d);
-      PID_total = map(PID_total, -150, 150, 0, 90);
+      PID_total = map(PID_total, -150, 150, 0, 100);
     
       if(PID_total < 10){PID_total = 10;}
-      if(PID_total > 80) {PID_total = 80;}
+      if(PID_total > 90) {PID_total = 90;}
 
       int final_pid_total = 180-PID_total;
-      //final_pid_total = map(final_pid_total, 85, 145, 0, 240);
   
-      //Serial.print("\t\t\t\t\t\tPID_total: "); Serial.println(final_pid_total);
-      //Serial.print("Final PID Total = "); Serial.println(final_pid_total);
       myservo.write(final_pid_total);
       
       if (debug) {Serial.print("Final PID Total = "); Serial.println(final_pid_total);}
       distance_previous_error = distance_error;
       if (debug) {delay(50);}
     }
-
-//    int start_pos = 40;
-//    int end_pos = 180;
-//    int increment = 5;
-//
-//    for(int i = start_pos; i < end_pos + 1; i += increment)
-//    {
-//      delay(1000);
-//      Serial.print("Position = "); Serial.println(i);
-//      myservo.write(i);
-//    }
-//    for(int i = end_pos; i > start_pos - 1; i -= increment)
-//    {
-//      delay(1000);
-//      Serial.print("Position = "); Serial.println(i);
-//      myservo.write(i);
-//    }
     
   }
   
 }
-
-
-
-
-
 
 
 float get_dist(int n)
