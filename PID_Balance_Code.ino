@@ -43,6 +43,7 @@ float PID_p, PID_i, PID_d, PID_total;
 
 boolean debug = true;
 int num_consecutive_times_close_to_center = 0;
+int center_servo_angle = 125;
 
 void setup() {
   //analogReference(EXTERNAL);
@@ -65,10 +66,10 @@ void setup() {
 
 
   
-  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+  myservo.attach(9); // attaches the servo on pin 9 to the servo object
   myservo.write(0);
   delay(1000);
-  myservo.write(170); //Put the servco at angle 125, so the balance is in the middle
+  myservo.write(170);
   delay(1000);
   pinMode(Analog_in,INPUT);  
   time = millis();
@@ -125,7 +126,7 @@ void loop() {
         if(num_consecutive_times_close_to_center >= 3)
         {
           Serial.println("Stop!");
-          myservo.write(125);
+          myservo.write(center_servo_angle);
           return;
         }
         else
