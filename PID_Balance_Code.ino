@@ -29,9 +29,14 @@ int period = 120;  //Refresh rate period of the loop is 50ms
 
 
 ///////////////////PID constants///////////////////////
-float kp=8; //Mine was 8
-float ki=0.2; //Mine was 0.2
-float kd=5000; //Mine was 3100
+
+float kp_orig=8; //Mine was 8
+float ki_orig=0.2; //Mine was 0.2
+float kd_orig=5000; //Mine was 3100
+
+float kp=kp_orig; //Mine was 8
+float ki=ki_orig; //Mine was 0.2
+float kd=kd_orig; //Mine was 3100
 float distance_setpoint = 36;         //Should be the distance from sensor to the middle of the bar in mm
 float PID_p, PID_i, PID_d, PID_total;
 ///////////////////////////////////////////////////////
@@ -123,10 +128,20 @@ void loop() {
           myservo.write(125);
           return;
         }
+        else
+        {
+          float factor = .5;
+          kp *= factor;
+          ki *= factor;
+          kd *= factor;
+        }
       }
       else
       {
         num_consecutive_times_close_to_center = 0;
+        kp=kp_orig;
+        ki=ki_orig;
+        kd=kd_orig;
       }
 
       
