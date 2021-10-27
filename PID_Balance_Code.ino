@@ -37,7 +37,7 @@ float kd_orig=5000; //Mine was 3100
 float kp=kp_orig; //Mine was 8
 float ki=ki_orig; //Mine was 0.2
 float kd=kd_orig; //Mine was 3100
-float distance_setpoint = 36;         //Should be the distance from sensor to the middle of the bar in mm
+float distance_setpoint = 36;         // 36 Should be the distance from sensor to the middle of the bar in mm
 float PID_p, PID_i, PID_d, PID_total;
 ///////////////////////////////////////////////////////
 
@@ -61,9 +61,6 @@ void setup() {
   }
   // power 
   Serial.println(F("VL53L0X API Simple Ranging example\n\n")); 
-
-
-
 
   
   myservo.attach(9); // attaches the servo on pin 9 to the servo object
@@ -127,11 +124,11 @@ void loop() {
         {
           Serial.println("Stop!");
           myservo.write(center_servo_angle);
-          return;
+          break;
         }
         else
         {
-          float factor = .5;
+          float factor = .7;
           kp *= factor;
           ki *= factor;
           kd *= factor;
@@ -160,7 +157,6 @@ void loop() {
       int final_pid_total = 180-PID_total;
   
       myservo.write(final_pid_total);
-      
       
       distance_previous_error = distance_error;
       if (debug) {delay(50);}
