@@ -20,11 +20,10 @@ Servo myservo;  // create servo object to control a servo, later attatched to D9
 
 
 ////////////////////////Variables///////////////////////
-int Read = 0;
 float distance = 0.0;
-float elapsedTime, time, timePrev;        //Variables for time control
+float time;        //Variables for time control
 float distance_previous_error, distance_error;
-int period = 120;  //Refresh rate period of the loop is 50ms
+int period = 120;  //Refresh rate period of the loop is 120ms
 ///////////////////////////////////////////////////////
 
 
@@ -38,6 +37,7 @@ float kp=kp_orig; //Mine was 8
 float ki=ki_orig; //Mine was 0.2
 float kd=kd_orig; //Mine was 3100
 float distance_setpoint = 36;         // 36 Should be the distance from sensor to the middle of the bar in mm
+
 float PID_p, PID_i, PID_d, PID_total;
 ///////////////////////////////////////////////////////
 
@@ -98,9 +98,6 @@ void loop() {
       
       distance_error = distance_setpoint - distance - 4;
 
-      
-      
-      if (debug) {Serial.print("\t\t\tDistance Error = "); Serial.println(distance_error);}
       PID_p = kp * distance_error;
       float dist_diference = distance_error - distance_previous_error;     
         
@@ -114,8 +111,6 @@ void loop() {
       }
 
       PID_d = kd*((distance_error - distance_previous_error)/period);
-
-      //if (debug) {Serial.print("PID_d = "); Serial.println(PID_d);}
 
       if(abs(distance_error) < 5 && abs(PID_d) < 175)
       {
@@ -141,14 +136,9 @@ void loop() {
         ki=ki_orig;
         kd=kd_orig;
       }
-
-      Serial.print("\t\t\t\t\tkp: "); Serial.println(kp);
-      Serial.print("\t\t\t\t\tki: "); Serial.println(ki);
-      Serial.print("\t\t\t\t\tkd: "); Serial.println(kd);
       
     
       PID_total = PID_p + PID_i + PID_d;
-      if (debug) {Serial.print("\t\t\tPID Total = "); Serial.println(PID_total);}
       PID_total = map(PID_total, -240, 240, 0, 100);
     
       if(PID_total < 10){PID_total = 10;}
@@ -164,23 +154,4 @@ void loop() {
     
   }
   
-}
-
-
-float get_dist(int n)
-{
-  long sum=0;
-  for(int i=0;i<n;i++)
-  {
-    sum=sum+analogRead(Analog_in);
-  }  
-  //Serial.print("One Time Reading: "); Serial.println(analogRead(Analog_in));
-  float adc=sum/n;
-  //float volts = analogRead(adc)*0.0048828125;  // value from sensor * (5/1024)
-  //float volts = sum*0.003222656;  // value from sensor * (3.3/1024) EXTERNAL analog refference
-
-  float distance_cm = 17569.7 * pow(adc, -1.2062);
-  //float distance_cm = 13*pow(volts, -1); 
-  Serial.print("Distance: "); Serial.println(distance_cm);
-  return(distance_cm - 7);
 }
