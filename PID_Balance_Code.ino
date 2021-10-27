@@ -97,13 +97,13 @@ void loop() {
         continue;
       }
       
-      //if (debug) {Serial.print("Distance = "); Serial.println(distance);}
+      if (debug) {Serial.print("Distance = "); Serial.println(distance);}
       
       distance_error = distance_setpoint - distance - 4;
 
       
       
-      //if (debug) {Serial.print("\t\t\tDistance Error = "); Serial.println(distance_error);}
+      if (debug) {Serial.print("\t\t\tDistance Error = "); Serial.println(distance_error);}
       PID_p = kp * distance_error;
       float dist_diference = distance_error - distance_previous_error;     
         
@@ -145,13 +145,14 @@ void loop() {
         kd=kd_orig;
       }
 
-      Serial.print("kp: "); Serial.println(kp);
-      Serial.print("ki: "); Serial.println(ki);
-      Serial.print("kd: "); Serial.println(kd);
+      Serial.print("\t\t\t\t\tkp: "); Serial.println(kp);
+      Serial.print("\t\t\t\t\tki: "); Serial.println(ki);
+      Serial.print("\t\t\t\t\tkd: "); Serial.println(kd);
       
     
-      PID_total = PID_p + PID_i + PID_d;  
-      PID_total = map(PID_total, -150, 150, 0, 100);
+      PID_total = PID_p + PID_i + PID_d;
+      if (debug) {Serial.print("\t\t\tPID Total = "); Serial.println(PID_total);}
+      PID_total = map(PID_total, -240, 240, 0, 100);
     
       if(PID_total < 10){PID_total = 10;}
       if(PID_total > 90) {PID_total = 90;}
@@ -160,7 +161,7 @@ void loop() {
   
       myservo.write(final_pid_total);
       
-      //if (debug) {Serial.print("Final PID Total = "); Serial.println(final_pid_total);}
+      
       distance_previous_error = distance_error;
       if (debug) {delay(50);}
     }
