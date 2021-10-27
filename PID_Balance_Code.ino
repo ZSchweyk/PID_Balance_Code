@@ -29,14 +29,14 @@ int period = 120;  //Refresh rate period of the loop is 120ms
 
 ///////////////////PID constants///////////////////////
 
-float kp_orig=8; //Mine was 8
-float ki_orig=0.2; //Mine was 0.2
-float kd_orig=5000; //Mine was 3100
+float kp_orig=8;
+float ki_orig=0.2;
+float kd_orig=5000;
 
-float kp=kp_orig; //Mine was 8
-float ki=ki_orig; //Mine was 0.2
-float kd=kd_orig; //Mine was 3100
-float distance_setpoint = 36;         // 36 Should be the distance from sensor to the middle of the bar in mm
+float kp=kp_orig;
+float ki=ki_orig;
+float kd=kd_orig;
+float distance_setpoint = 36; // 36 Should be the distance from sensor to the middle of the bar in cm. Be sure to account for the 4-5 cm length of tape next to the Lidar sensor.
 
 float PID_p, PID_i, PID_d, PID_total;
 ///////////////////////////////////////////////////////
