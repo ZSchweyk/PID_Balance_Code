@@ -1,7 +1,6 @@
 /* PID balance code with ping pong ball and distance sensor sharp 2y0a21
  *  by ELECTRONOOBS: https://www.youtube.com/channel/UCjiVhIvGmRZixSzupD0sS9Q
  *  Tutorial: http://electronoobs.com/eng_arduino_tut100.php
- *  Code: http://electronoobs.com/eng_arduino_tut100_code1.php
  *  Scheamtic: http://electronoobs.com/eng_arduino_tut100_sch1.php 
  *  3D parts: http://electronoobs.com/eng_arduino_tut100_stl1.php   
  */
