@@ -10,15 +10,12 @@ int Analog_in = A0;
 Servo myservo;  // create servo object to control a servo, later attatched to D9
 ///////////////////////////////////////////////////////
 
-
-
 ////////////////////////Variables///////////////////////
 float distance = 0.0;
 float time;        //Variables for time control
 float distance_previous_error, distance_error;
 int period = 120;  //Refresh rate period of the loop is 120ms
 ///////////////////////////////////////////////////////
-
 
 ///////////////////PID constants///////////////////////
 
@@ -102,7 +99,6 @@ void loop() {
       {
         PID_i = 0;
       }
-
       
       PID_d = kd*((distance_error - distance_previous_error)/period); // find the derivative of the ball's position (its instantaneous speed in cm/millisecond) and scale it up with the kd constant.
 
@@ -133,7 +129,6 @@ void loop() {
         kd=kd_orig;
       }
       
-    
       PID_total = PID_p + PID_i + PID_d; // take the sum of the p, i and d values to prepare for writing to the servo
       PID_total = map(PID_total, -240, 240, 0, 100); // map the value of PID_total from 0 to 100. This assumes that the range of PID_total is [-240, 240].
       // NOTE: IF THE SERVO MOTOR IS PHYSICALLY ROTATED TO A POSITION, SIMPLY CHANGE THE MAP CONSTANTS ABOVE TO ACCOUNT FOR THAT CHANGE. THIS IS THE ONLY THING YOU NEED TO CHANGE WHEN THIS HAPPENS.
@@ -153,7 +148,5 @@ void loop() {
       distance_previous_error = distance_error; // set distance_previous_error to distance_error for the next loop iteration.
       if (debug) {delay(50);} // wait/sleep for 50 milliseconds. I found that the servo does not have a difficult time responding without this wait, so set debug = False to skip this line if you'd like.
     }
-    
   }
-  
 }
