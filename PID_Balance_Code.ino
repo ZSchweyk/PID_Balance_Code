@@ -1,10 +1,3 @@
-/* PID balance code with ping pong ball and distance sensor sharp 2y0a21
- *  by ELECTRONOOBS: https://www.youtube.com/channel/UCjiVhIvGmRZixSzupD0sS9Q
- *  Tutorial: http://electronoobs.com/eng_arduino_tut100.php
- *  Code: http://electronoobs.com/eng_arduino_tut100_code1.php
- *  Scheamtic: http://electronoobs.com/eng_arduino_tut100_sch1.php 
- *  3D parts: http://electronoobs.com/eng_arduino_tut100_stl1.php   
- */
 #include <Wire.h>
 #include <Servo.h>
 
@@ -143,6 +136,7 @@ void loop() {
     
       PID_total = PID_p + PID_i + PID_d; // take the sum of the p, i and d values to prepare for writing to the servo
       PID_total = map(PID_total, -240, 240, 0, 100); // map the value of PID_total from 0 to 100. This assumes that the range of PID_total is [-240, 240].
+      // NOTE: IF THE SERVO MOTOR IS PHYSICALLY ROTATED TO A POSITION, SIMPLY CHANGE THE MAP CONSTANTS ABOVE TO ACCOUNT FOR THAT CHANGE. THIS IS THE ONLY THING YOU NEED TO CHANGE WHEN THIS HAPPENS.
 
       // If for any reason PID_total falls within a range not within [-240, 240] as defined above, it will be mapped to a value outside of the range [0, 100].
       // In this case, limit the minimum of the mapped PID_total to 10 and the maximum to 90.
@@ -152,7 +146,7 @@ void loop() {
       // Because the arm that connects the servo to the seesaw is on the opposite side of the Lidar sensor, invert the value of PID_total.
       // The servo only writes angles that are between 0 and 180.
       // Assuming that the center_servo_angle is around 125 to 130, the maximum angle of the seesaw will be approximately the same on both sides. In other words, the seesaw's maximum tilting angle on the left will be approximately equal to the right.
-      int final_pid_total = 180-PID_total;
+      int final_pid_total = 180-PID_total; // I inverted the angle of the PID_total because the servo was on the opposite side of the seesaw.
   
       myservo.write(final_pid_total); // write final_pid_total to the servo
       
