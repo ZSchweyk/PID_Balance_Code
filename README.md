@@ -13,9 +13,9 @@ https://2022mechatronicszeynschweyk.weebly.com/senior_year_capstone
 ---
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/89613261/147396477-a4492092-7292-443d-9a88-0abf9cfe3362.jpg" width="33%" />
-  <img src="https://user-images.githubusercontent.com/89613261/147396494-303dd062-a318-482a-a259-b3852426d2a0.jpg" width="33%" />
-  <img src="https://user-images.githubusercontent.com/89613261/147396785-aa879218-e9b6-4aeb-9f9c-8104507aa3c3.jpg" width="33%" />
+  <img src="https://user-images.githubusercontent.com/89613261/147396477-a4492092-7292-443d-9a88-0abf9cfe3362.jpg" width="30%" />
+  <img src="https://user-images.githubusercontent.com/89613261/147396494-303dd062-a318-482a-a259-b3852426d2a0.jpg" width="30%" />
+  <img src="https://user-images.githubusercontent.com/89613261/147396785-aa879218-e9b6-4aeb-9f9c-8104507aa3c3.jpg" width="30%" />
 </p>
 
 
